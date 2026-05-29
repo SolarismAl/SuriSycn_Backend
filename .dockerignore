@@ -1,0 +1,15 @@
+/vendor
+/node_modules
+/public/storage
+/.env
+/.git
+/storage/*.key
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/logs/*
+Homestead.json
+Homestead.yaml
+.phpunit.result.cache
+docker-compose.yml
