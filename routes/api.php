@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\AnnouncementController;
 use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\DashboardController;
+use App\Http\Controllers\Api\V1\ReportController;
 
 Route::prefix('v1')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
@@ -19,6 +20,10 @@ Route::prefix('v1')->group(function () {
         Route::get('/me', [AuthController::class, 'me']);
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::post('/refresh', [AuthController::class, 'refresh']);
+
+        // Reports
+        Route::get('/reports/tasks/export', [ReportController::class, 'exportTasks']);
+        Route::get('/reports/reservations/export', [ReportController::class, 'exportReservations']);
 
         // Notifications
         Route::get('/notifications', [NotificationController::class, 'index']);
