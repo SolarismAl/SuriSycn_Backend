@@ -24,6 +24,7 @@ class EventResource extends JsonResource
             'color' => $this->color,
             'created_by' => $this->created_by,
             'department_id' => $this->department_id,
+            'external_participants' => $this->external_participants,
             'tagged_users' => $this->whenLoaded('taggedUsers'),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

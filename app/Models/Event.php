@@ -22,11 +22,13 @@ class Event extends Model
         'color',
         'created_by',
         'department_id',
+        'external_participants',
     ];
 
     protected $casts = [
         'start_date' => 'datetime',
         'end_date' => 'datetime',
+        'external_participants' => 'array',
     ];
 
     public function creator()

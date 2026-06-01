@@ -32,6 +32,8 @@ class UpdateEventRequest extends FormRequest
             'department_id' => 'nullable|uuid|exists:departments,id',
             'tagged_users' => 'nullable|array',
             'tagged_users.*' => 'uuid|exists:users,id',
+            'external_participants' => 'nullable|array',
+            'external_participants.*' => 'email',
         ];
     }
 }

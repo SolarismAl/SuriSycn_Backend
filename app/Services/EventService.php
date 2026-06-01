@@ -40,6 +40,13 @@ class EventService extends BaseService
                 \Illuminate\Support\Facades\Notification::send($users, new \App\Notifications\EventInvitationNotification($event));
             }
 
+            // Notify external participants
+            if (isset($data['external_participants']) && is_array($data['external_participants']) && !empty($data['external_participants'])) {
+                foreach ($data['external_participants'] as $email) {
+                    \Illuminate\Support\Facades\Mail::to($email)->send(new \App\Mail\ExternalEventInvitationMail($event));
+                }
+            }
+
             DB::commit();
             return $event->load('taggedUsers');
         } catch (Exception $e) {
@@ -65,6 +72,13 @@ class EventService extends BaseService
                 // Notify users
                 $users = \App\Models\User::whereIn('id', $taggedUserIds)->get();
                 \Illuminate\Support\Facades\Notification::send($users, new \App\Notifications\EventInvitationNotification($event));
+            }
+
+            // Notify external participants
+            if (isset($data['external_participants']) && is_array($data['external_participants']) && !empty($data['external_participants'])) {
+                foreach ($data['external_participants'] as $email) {
+                    \Illuminate\Support\Facades\Mail::to($email)->send(new \App\Mail\ExternalEventInvitationMail($event));
+                }
             }
 
             DB::commit();

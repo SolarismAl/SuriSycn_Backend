@@ -48,12 +48,24 @@ class ReservationController extends BaseApiController
 
     public function update(UpdateReservationRequest $request, string $id)
     {
+        $reservation = $this->reservationRepository->findOrFail($id);
+        $user = $request->user();
+
+        // Check authorization: only admin, staff, or the creator can update
+        if ($user->role === 'user' && $reservation->requested_by !== $user->id) {
+            return $this->errorResponse('Unauthorized to update this reservation', 403);
+        }
+
         $data = $request->validated();
 
         try {
             // If only status is being changed, use the approval flow
             if (isset($data['status']) && count($data) === 1) {
-                $this->reservationService->updateStatus($id, $data['status'], $request->user()->id);
+                // Ensure only admin/staff can approve/reject
+                if ($user->role === 'user') {
+                    return $this->errorResponse('Unauthorized to update reservation status', 403);
+                }
+                $this->reservationService->updateStatus($id, $data['status'], $user->id);
             } else {
                 // Otherwise it's an edit of room/time fields
                 $this->reservationService->updateReservation($id, $data);
@@ -66,8 +78,16 @@ class ReservationController extends BaseApiController
     }
 
 
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
+        $reservation = $this->reservationRepository->findOrFail($id);
+        $user = $request->user();
+
+        // Check authorization: only admin, staff, or the creator can delete
+        if ($user->role === 'user' && $reservation->requested_by !== $user->id) {
+            return $this->errorResponse('Unauthorized to delete this reservation', 403);
+        }
+
         $this->reservationRepository->delete($id);
         return $this->successResponse(null, 'Reservation deleted successfully');
     }
