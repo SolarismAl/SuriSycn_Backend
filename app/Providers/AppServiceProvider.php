@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Transport\GmailApiTransport;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +22,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Mail::extend('gmail_api', function (array $config = []) {
+            return new GmailApiTransport($config);
+        });
+
         Gate::define('is-admin', function ($user) {
             return $user->role === \App\Enums\Role::ADMIN->value;
         });
