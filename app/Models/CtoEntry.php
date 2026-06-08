@@ -12,6 +12,7 @@ class CtoEntry extends Model
 
     protected $fillable = [
         'user_id',
+        'office_order_id',
         'type',
         'date',
         'hours',
@@ -34,5 +35,10 @@ class CtoEntry extends Model
     public function approver()
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function officeOrder()
+    {
+        return $this->belongsTo(OfficeOrder::class);
     }
 }

@@ -12,7 +12,7 @@ class CtoController extends BaseApiController
 {
     public function index(Request $request)
     {
-        $query = CtoEntry::with(['user', 'approver'])->orderBy('created_at', 'desc');
+        $query = CtoEntry::with(['user', 'approver', 'officeOrder'])->orderBy('created_at', 'desc');
 
         if ($request->user()->isAdmin() || $request->user()->isManager()) {
             $userId = $request->query('user_id');
@@ -92,6 +92,23 @@ class CtoController extends BaseApiController
         $data = $request->validated();
         $data['user_id'] = $request->user()->id;
         $data['status'] = 'pending';
+
+        if (!empty($data['office_order_id'])) {
+            $officeOrder = \App\Models\OfficeOrder::find($data['office_order_id']);
+            
+            if (!$officeOrder || !$officeOrder->is_active) {
+                return $this->errorResponse('Selected Office Order is invalid or inactive', 400);
+            }
+
+            if (!$officeOrder->users()->where('users.id', $request->user()->id)->exists()) {
+                return $this->errorResponse('You are not authorized under this Office Order', 403);
+            }
+
+            $date = \Carbon\Carbon::parse($data['date']);
+            if ($date->lt($officeOrder->valid_from) || $date->gt($officeOrder->valid_until)) {
+                return $this->errorResponse('The date selected does not fall within the valid period of the Office Order', 400);
+            }
+        }
 
         $entry = CtoEntry::create($data);
 

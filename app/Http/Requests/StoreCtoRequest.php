@@ -19,6 +19,7 @@ class StoreCtoRequest extends FormRequest
     {
         $rules = [
             'type' => 'required|in:earned,used',
+            'office_order_id' => 'required|uuid|exists:office_orders,id',
             'date' => 'required|date',
             'hours' => 'required|numeric|min:0.5',
             'reason' => 'required|string|max:500',
