@@ -25,7 +25,7 @@ class OfficeOrder extends Model
         'date_issued' => 'date',
         'valid_from' => 'date',
         'valid_until' => 'date',
-        'is_active' => 'boolean',
+        'is_active' => \App\Casts\PgBooleanCast::class,
     ];
 
     public function users()

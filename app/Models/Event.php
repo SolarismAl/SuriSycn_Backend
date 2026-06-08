@@ -29,7 +29,7 @@ class Event extends Model
     protected $casts = [
         'start_date' => 'datetime',
         'end_date' => 'datetime',
-        'is_meeting' => 'boolean',
+        'is_meeting' => \App\Casts\PgBooleanCast::class,
         'external_participants' => 'array',
     ];
 
