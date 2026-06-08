@@ -43,7 +43,7 @@ class ReservationStatusNotification extends Notification implements \Illuminate\
                     ->line('**Room:** ' . $this->reservation->room_name)
                     ->line('**Schedule:** ' . $this->reservation->start_time->format('M d, Y h:i A') . ' to ' . $this->reservation->end_time->format('M d, Y h:i A'))
                     ->action('View Reservation', url('/reservations/' . $this->reservation->id))
-                    ->salutation("Best regards,\nSuriSync Government Operations");
+                    ->salutation("Best regards,\nCITO Workspace Operations");
     }
 
     /**

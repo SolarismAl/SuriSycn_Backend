@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\HtmlString;
 
 class EventInvitationNotification extends Notification
 {
@@ -45,15 +46,17 @@ class EventInvitationNotification extends Notification
             "&details=" . urlencode($this->event->description);
 
         return (new MailMessage)
-                    ->subject('Invitation: ' . $this->event->title)
-                    ->greeting('Hello ' . $notifiable->first_name . ',')
-                    ->line('You have been invited to the following event.')
-                    ->line('**Title:** ' . $this->event->title)
-                    ->line('**Description:** ' . $this->event->description)
-                    ->line('**Schedule:** ' . $this->event->start_date->format('M d, Y h:i A') . ' to ' . $this->event->end_date->format('M d, Y h:i A'))
-                    ->action('Add to Google Calendar', $gcalLink)
-                    ->line('Sender: ' . $this->event->creator->first_name . ' ' . $this->event->creator->last_name)
-                    ->salutation("Best regards,\nSuriSync Government Operations")
+                    ->subject(($this->event->is_meeting ? 'MEETING' : 'EVENT') . ' INVITATION: ' . $this->event->title)
+                    ->line('**' . ($this->event->is_meeting ? 'MEETING' : 'EVENT') . ' INVITATION**')
+                    ->line('Dear ' . $notifiable->first_name . ',')
+                    ->line('You are formally invited to attend the following ' . ($this->event->is_meeting ? 'meeting' : 'event') . ' organized by the City Information Technology Office.')
+                    ->line('**' . ($this->event->is_meeting ? 'Meeting' : 'Event') . ':** ' . $this->event->title)
+                    ->line(new HtmlString('**Description:**<br>' . nl2br(e($this->event->description))))
+                    ->line('**Schedule:** ' . $this->event->formatted_schedule)
+                    ->line('**Coordinator:** ' . $this->event->creator->first_name . ' ' . $this->event->creator->last_name)
+                    ->action('Add to Calendar', $gcalLink)
+                    ->line('Your attendance is highly requested.')
+                    ->salutation("Best regards,\nCITO Workspace Operations")
                     ->attachData($this->buildIcsContent(), 'invite.ics', [
                         'mime' => 'text/calendar; charset=UTF-8; method=REQUEST',
                     ]);
@@ -63,10 +66,11 @@ class EventInvitationNotification extends Notification
     {
         return "BEGIN:VCALENDAR\r\n" .
             "VERSION:2.0\r\n" .
-            "PRODID:-//SuriSync//EN\r\n" .
+            "PRODID:-//CITO Workspace//EN\r\n" .
+            "VERSION:2.0\r\n" .
             "METHOD:REQUEST\r\n" .
             "BEGIN:VEVENT\r\n" .
-            "UID:event-{$this->event->id}@surisync\r\n" .
+            "UID:event-{$this->event->id}@citoworkspace\r\n" .
             "DTSTAMP:" . gmdate('Ymd\THis\Z') . "\r\n" .
             "DTSTART:" . $this->event->start_date->setTimezone('UTC')->format('Ymd\THis\Z') . "\r\n" .
             "DTEND:" . $this->event->end_date->setTimezone('UTC')->format('Ymd\THis\Z') . "\r\n" .

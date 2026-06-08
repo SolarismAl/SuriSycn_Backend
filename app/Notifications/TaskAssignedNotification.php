@@ -45,7 +45,7 @@ class TaskAssignedNotification extends Notification implements \Illuminate\Contr
                     ->line('**Priority:** ' . ucfirst($this->task->priority))
                     ->action('View Task', url('/tasks/' . $this->task->id))
                     ->line('Sender: ' . $this->task->creator->first_name . ' ' . $this->task->creator->last_name)
-                    ->salutation("Best regards,\nSuriSync Government Operations");
+                    ->salutation("Best regards,\nCITO Workspace Operations");
     }
 
     /**

@@ -40,7 +40,7 @@ class AnnouncementPublishedNotification extends Notification implements \Illumin
                     ->line('**Title:** ' . $this->announcement->title)
                     ->line('**Message:** ' . str($this->announcement->content)->limit(100))
                     ->action('Read Announcement', url('/announcements/' . $this->announcement->id))
-                    ->salutation("Best regards,\nSuriSync Government Operations");
+                    ->salutation("Best regards,\nCITO Workspace Operations");
     }
 
     /**

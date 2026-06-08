@@ -64,10 +64,10 @@ class ExternalEventInvitationMail extends Mailable
     {
         $icsContent = "BEGIN:VCALENDAR\r\n" .
             "VERSION:2.0\r\n" .
-            "PRODID:-//SuriSync//EN\r\n" .
+            "PRODID:-//CITO Workspace//EN\r\n" .
             "METHOD:REQUEST\r\n" .
             "BEGIN:VEVENT\r\n" .
-            "UID:event-{$this->event->id}@surisync\r\n" .
+            "UID:event-{$this->event->id}@citoworkspace\r\n" .
             "DTSTAMP:" . gmdate('Ymd\THis\Z') . "\r\n" .
             "DTSTART:" . $this->event->start_date->setTimezone('UTC')->format('Ymd\THis\Z') . "\r\n" .
             "DTEND:" . $this->event->end_date->setTimezone('UTC')->format('Ymd\THis\Z') . "\r\n" .

@@ -22,12 +22,14 @@ class Event extends Model
         'color',
         'created_by',
         'department_id',
+        'is_meeting',
         'external_participants',
     ];
 
     protected $casts = [
         'start_date' => 'datetime',
         'end_date' => 'datetime',
+        'is_meeting' => 'boolean',
         'external_participants' => 'array',
     ];
 
@@ -52,5 +54,17 @@ class Event extends Model
                     ->using(EventUserTag::class)
                     ->withPivot('id')
                     ->withTimestamps();
+    }
+
+    public function getFormattedScheduleAttribute()
+    {
+        $start = $this->start_date;
+        $end = $this->end_date;
+
+        if ($start->isSameDay($end)) {
+            return $start->format('F j, Y g:i A') . ' - ' . $end->format('g:i A');
+        }
+
+        return $start->format('F j, Y g:i A') . ' to ' . $end->format('F j, Y g:i A');
     }
 }

@@ -1,22 +1,30 @@
 @component('mail::message')
-# Invitation: {{ $event->title }}
 
-Hello,
 
-You have been invited to the following event.
+Dear Sir/Madam,
 
-**Title:** {{ $event->title }}
+You are formally invited to attend the following {{ $event->is_meeting ? 'meeting' : 'event' }} organized by the City Information Technology Office.
 
-**Description:** {{ $event->description }}
+@component('mail::panel')
+**{{ $event->is_meeting ? 'Meeting' : 'Event' }}:** {{ $event->title }}
 
-**Schedule:** {{ $event->start_date->format('M d, Y h:i A') }} to {{ $event->end_date->format('M d, Y h:i A') }}
+**Description:**<br>
+{!! nl2br(e($event->description)) !!}
 
-**Sender:** {{ $event->creator->first_name }} {{ $event->creator->last_name }}
+**Schedule:** {{ $event->formatted_schedule }}
 
-@component('mail::button', ['url' => $gcalLink, 'color' => 'success'])
-Add to Google Calendar
+**Coordinator:** {{ $event->creator->first_name }} {{ $event->creator->last_name }}
 @endcomponent
 
-Best regards,<br>
-SuriSync Government Operations
+Please click the button below to add this {{ $event->is_meeting ? 'meeting' : 'event' }} to your Google Calendar.
+
+@component('mail::button', ['url' => $gcalLink, 'color' => 'primary'])
+Add to Calendar
+@endcomponent
+
+Thank you for your prompt attention to this matter.
+
+Respectfully,<br>
+**City Information Technology Office**<br>
+*CITO Workspace Operations*
 @endcomponent

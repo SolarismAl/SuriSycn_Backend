@@ -39,6 +39,11 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('tasks', TaskController::class);
         Route::apiResource('documents', \App\Http\Controllers\Api\V1\DocumentController::class);
 
+        // CTO (Compensatory Time Off)
+        Route::get('/cto', [\App\Http\Controllers\Api\V1\CtoController::class, 'index']);
+        Route::get('/cto/balance', [\App\Http\Controllers\Api\V1\CtoController::class, 'balance']);
+        Route::post('/cto', [\App\Http\Controllers\Api\V1\CtoController::class, 'store']);
+
         // Announcements (Public read access if authenticated)
         Route::get('/announcements', [AnnouncementController::class, 'index']);
         Route::get('/announcements/{announcement}', [AnnouncementController::class, 'show']);
@@ -49,6 +54,11 @@ Route::prefix('v1')->group(function () {
             Route::post('/announcements', [AnnouncementController::class, 'store']);
             Route::put('/announcements/{announcement}', [AnnouncementController::class, 'update']);
             Route::delete('/announcements/{announcement}', [AnnouncementController::class, 'destroy']);
+            
+            // Admin CTO Routes
+            Route::get('/cto/overview', [\App\Http\Controllers\Api\V1\CtoController::class, 'overview']);
+            Route::patch('/cto/bulk-status', [\App\Http\Controllers\Api\V1\CtoController::class, 'bulkUpdateStatus']);
+            Route::patch('/cto/{id}/status', [\App\Http\Controllers\Api\V1\CtoController::class, 'updateStatus']);
         });
 
         // Staff and Admin routes

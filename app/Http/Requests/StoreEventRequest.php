@@ -34,6 +34,7 @@ class StoreEventRequest extends FormRequest
             'tagged_users.*' => 'uuid|exists:users,id',
             'external_participants' => 'nullable|array',
             'external_participants.*' => 'email',
+            'is_meeting' => 'nullable|boolean',
         ];
     }
 }
