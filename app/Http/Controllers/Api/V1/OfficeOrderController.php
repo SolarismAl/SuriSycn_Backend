@@ -14,9 +14,9 @@ class OfficeOrderController extends BaseApiController
         $query = OfficeOrder::with('users:id,first_name,last_name,role')->orderBy('date_issued', 'desc');
 
         if (!$request->user()->isAdmin() && !$request->user()->isManager()) {
-            $query->where('is_active', true)
+            $query->whereRaw('is_active = true')
                   ->whereHas('users', function($q) use ($request) {
-                      $q->where('users.id', $request->user()->id);
+                      $q->where('office_order_user.user_id', $request->user()->id);
                   });
         }
 
