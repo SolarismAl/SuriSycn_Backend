@@ -35,6 +35,7 @@ class StoreEventRequest extends FormRequest
             'external_participants' => 'nullable|array',
             'external_participants.*' => 'email',
             'is_meeting' => 'nullable|boolean',
+            'is_reminder' => 'nullable|boolean',
         ];
     }
 }

@@ -23,6 +23,7 @@ class Event extends Model
         'created_by',
         'department_id',
         'is_meeting',
+        'is_reminder',
         'external_participants',
     ];
 
@@ -30,6 +31,7 @@ class Event extends Model
         'start_date' => 'datetime',
         'end_date' => 'datetime',
         'is_meeting' => \App\Casts\PgBooleanCast::class,
+        'is_reminder' => \App\Casts\PgBooleanCast::class,
         'external_participants' => 'array',
     ];
 
